@@ -7,10 +7,14 @@ from django.utils.translation import gettext  as _
 
 
 # Create your models here.
+
+#CURRENTLY NOT USED
 class Location(models.Model):
     Name = models.CharField(max_length=200)
     id = models.SmallIntegerField(primary_key=True)
 
+#DJANO TUTORIAL
+#this is a model that can be reused for Questions
 
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
@@ -22,6 +26,8 @@ class Question(models.Model):
     def __str__(self):
         return self.question_text
 
+#DJANO TUTORIAL
+#this is a model that can be reused for answer choice
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
@@ -30,15 +36,27 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.choice_text
-    
+
+#Model Denotes the Insurance and Insurance type used in a list of the treatment centeer and response for the questions
+
 class Insurance(models.Model):
     name =models.CharField(max_length= 100, unique=True)
     type = models.CharField(max_length = 10, default="Standard") # not sure if this is really needed
     def __str__(self):
             return self.name
     
+
+#Model Denotes the treatment style plan used in a list of the treatment center and response for the questions
+
 class Treatment_Model(models.Model):
-    name= models.CharField( max_length= "100",unique=True)
+    name= models.CharField( max_length= 100,unique=True)
+    def __str__(self):
+            return self.name
+
+
+
+#This model is for The treatment center location and all of the associated data
+#currently needs to store 51 locations and all associated data
 
 class TreatmentCenter(models.Model):
     name = models.CharField(unique=True, max_length=200)
