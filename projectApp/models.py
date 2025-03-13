@@ -13,29 +13,33 @@ class Location(models.Model):
     Name = models.CharField(max_length=200)
     id = models.SmallIntegerField(primary_key=True)
 
-#DJANO TUTORIAL
-#this is a model that can be reused for Questions
-
+# Question Model
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField("date published")
     
-    def was_published_recently(self):
-        return self.pub_date >= timezone.now() -datetime.timedelta(days=1)
-
     def __str__(self):
         return self.question_text
 
-#DJANO TUTORIAL
-#this is a model that can be reused for answer choice
+
+# List of all choices for that question
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
 
     def __str__(self):
         return self.choice_text
+
+# Stores the question and the choice the user chose.
+
+class UserResponse(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Response to {self.question}: {self.choice}"
 
 #Model Denotes the Insurance and Insurance type used in a list of the treatment centeer and response for the questions
 
@@ -72,12 +76,16 @@ class TreatmentCenter(models.Model):
     OTHER ="OTH"
     UNKNOWN = "UNKN"
     class Languages(models.TextChoices):
-        SPANISH = "Spanish"
-        ENGLISH = "English"
-        ENGLISH_SPANISH = "English/Spanish"
-        OTHER ="Other"
-        UNKNOWN = "Unknown"
-    languages = models.CharField(max_length=19, choices= Languages, default = ENGLISH) #figure out max length here not sure
+        SPANISH = "SPAN", "Spanish"
+        ENGLISH = "ENG", "English"
+        ENGLISH_SPANISH = "ENSP", "English/Spanish"
+        OTHER = "OTH", "Other"
+        UNKNOWN = "UNKN", "Unknown"
+    languages = models.CharField(
+        max_length=5,  # Adjust based on the longest choice value
+        choices=Languages.choices,  # Reference `.choices` correctly
+        default=Languages.ENGLISH  # Use class attribute for clarity
+    )
     insurances= models.ManyToManyField(Insurance, verbose_name= "Valid Insurances") # might need new parameters
     
     ss_payments = models.BooleanField(default=False,verbose_name ="Sliding Scale Payment") # bool key Note potentially use NUll vaireable to denote if empty values are set as null and not false
@@ -104,7 +112,7 @@ class TreatmentCenter(models.Model):
     
 
     #does there need to be a model for the questions/answers?
-#    Exta:
+#    Extra:
     
     #is id needed
     #criminal record limitation
