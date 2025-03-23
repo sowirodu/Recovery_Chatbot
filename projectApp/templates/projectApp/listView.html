@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+{% load static %}
+
+<div class="config-panel">
+</div>
+<form method= "POST">
+{% csrf_token %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treatment Centers</title>
+    <link rel="stylesheet" href="{% static 'projectApp/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Treatment Centers</h1>
+        
+    </header>
+    <div class="filter-bar">
+        <span class="filter-dropdown-text">Filter dataset</span> </a>
+        <a class="filter filter-hidden">
+          Region <span class="operator">=</span> North America, Asia </a><a class="filter-remove filter-hidden">&times;</a>
+        </a>
+        <input type="checkbox" id="vehicle1" name="vehicle1" >
+<label for="vehicle1"> I have a bike</label><br>
+<input type="checkbox" id="check_LGBTQ"  >
+<label for="vehicle1"> LGBTQ Accepting</label><br>
+<input type="checkbox" id="check_insurance"  >
+<label for="vehicle1"> Takes Insurance</label><br>
+<input type="checkbox" id="check_spiritual" >
+<label for="vehicle1"> Spiritual Practice</label><br>
+<button type="submit">Submit</button>
+    </div>
+      
+      
+    <main class="cards-container">
+        <!-- Example card -->
+        {% for center in centers%}
+        <a href= {{center.hyperlink}} target="_blank" class="card">
+            <div class="card-content">
+                <h2>{{center.name}}</h2>
+                <div class="details">1888
+                    <ul>
+                        <li>{{center.description}}.</li>
+                        <li>{{center.treatment_model}}.</li>
+                        <li>{{ center.address_1 }} <br> {{ center.address_2 }}</li>
+                    </ul>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+        <!-- Add more cards dynamically here -->
+    </main>
+</body>
+</form>
+</html>

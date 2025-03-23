@@ -1,0 +1,118 @@
+/* Main Container */
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Individual Cards */
+.card {
+    display: block; /* Ensures the entire card is clickable */
+    text-decoration: none; /* Removes default link styling */
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 800px; /* Adjust width as needed */
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: left; /* Align content to the left */
+    transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+    color: inherit; /* Ensures text inherits color */
+    gap: 1rem;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    background-color: #f9f9f9; /* Subtle color change on hover */
+}
+/* Logo Style */
+.center-logo {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Title and Details Section */
+.card-content {
+    flex: 1; /* Take up remaining space */
+}
+
+.card h2 {
+    font-size: 1.5rem;
+    color: #0077cc;
+    margin-bottom: 0.5rem;
+}
+
+.card .details {
+    font-size: 1rem;
+    color: #555;
+}
+header {
+    background-color: #0077cc;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    height: 120px;
+}
+
+
+/* FILTER BAR START*/
+.filter-bar{
+    height: 100px;
+    background-color: #bfdff0;
+    padding: 16px;
+
+  }
+  
+  i{
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+  
+  .filter-dropdown{
+    color: rgba(255,255,255,0.8);
+    transition: color 0.2s ease;
+    cursor: pointer;
+    margin-right: 16px;
+  }
+  
+  .filter-dropdown:hover{
+    color: rgba(255,255,255,0.5);
+  }
+  
+  .filter{
+    padding: 8px 8px 8px 16px;
+    background-color: #3A3A3A;
+    border-radius: 50px 0 0 50px;
+    color: rgba(255,255,255,0.8);
+    margin: 8px 0;
+    transition: all 0.2s ease;
+  }
+  
+  .filter-remove{
+    padding: 8px 16px 8px 8px;
+    background-color: #3A3A3A;
+    border-radius: 0 50px 50px 0;
+    color: rgba(255,255,255,0.8);
+    transition: all 0.2s ease;
+  }
+  
+  .filter:hover, .filter-remove:hover{
+    color: white;
+    background-color: #585858;
+  }
+  
+  .operator{
+    color: rgba(255,255,255,0.5);
+  }
+  .filter-hidden{
+    visibility: hidden;
+  }
+/* FILTER BAR END*/

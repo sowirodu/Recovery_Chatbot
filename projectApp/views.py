@@ -2,9 +2,23 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.template import loader
 from django.http import Http404
+from django.views import generic
 
-from .models import Question, Choice, UserResponse
+from .models import Question, Choice, TreatmentCenter, UserResponse
 from django.shortcuts import redirect
+
+#test using base index view
+class IndexView(generic.ListView):
+    template_name = "projectApp/listView.html"
+    context_object_name = "centers"
+
+    def get_queryset(self):
+        """Return the last five published questions."""
+        return TreatmentCenter.objects.order_by("name")[:5]
+    
+    
+
+
 
 def index(request):
     # Redirect to the first question (if available)
@@ -40,3 +54,38 @@ def detail(request, question_id):
                 return HttpResponse("Thank you for completing the questions!")
 
     return render(request, "projectApp/detail.html", {"question": question, "choices": choices})
+
+#create list view
+def listView(request):
+    centers = TreatmentCenter.objects.all()
+    
+    if not centers.exists():  # Check if no centers are available
+        raise Http404("No treatment centers found")
+    
+    
+    return render(request, "projectApp/listView.html", {"centers": centers})
+
+
+
+def filteredlistView(request):
+    centers = TreatmentCenter.objects.all()
+    
+    if not centers.exists():  # Check if no centers are available
+        raise Http404("No treatment centers found")
+    
+    if request.method == "POST":
+        if request.POST.get('action') == "Submit":
+           lgbtq = request.POST.get('check_LGBTQ')
+           if(lgbtq):
+               centers = centers.filter(lgbtq=lgbtq)
+
+    return render(request, "projectApp/listView.html", {"centers": centers})
+
+    
+
+currFilter = {
+    "insurance" : [],
+    "lgbtq" : True,
+    "virtual" : True
+
+}
