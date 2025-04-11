@@ -106,7 +106,14 @@ class TreatmentCenter(models.Model):
     hyperlink = models.URLField(default="https://www.youtube.com/")
     description = models.CharField(max_length= 500, default="Currently Blank: Will be updated") # can be expanded on
     # notes
-
+    active_choices = (
+         
+         ('true','Active'),
+         ('false','Inactive'),
+         ('null', "Unkown")
+    )
+    active = models.CharField(max_length=10, choices=active_choices, default ="null")
+    #For active null is not yet aproved, true is approved, and false is rejected/inactive  
     def __str__(self):
         return self.name
     

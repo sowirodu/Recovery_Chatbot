@@ -19,11 +19,12 @@
         
     </header>
     <div class="filter-bar">
-        <span class="filter-dropdown-text">Filter dataset</span> </a>
+        <span class="filter-dropdown-text">Filter dataset</span> 
         <a class="filter filter-hidden">
           Region <span class="operator">=</span> North America, Asia </a><a class="filter-remove filter-hidden">&times;</a>
         </a>
-        <input type="checkbox" id="vehicle1" name="vehicle1" >
+        
+<input type="checkbox" id="vehicle1" name="vehicle1" >
 <label for="vehicle1"> I have a bike</label><br>
 <input type="checkbox" id="check_LGBTQ"  >
 <label for="vehicle1"> LGBTQ Accepting</label><br>
@@ -34,25 +35,57 @@
 <button type="submit">Submit</button>
     </div>
       
-      
-    <main class="cards-container">
+    {% for center in centers%}
+    <main  class="cards-container" onclick = "myFunction(this)" id = "{{center.name}}">
         <!-- Example card -->
-        {% for center in centers%}
-        <a href= {{center.hyperlink}} target="_blank" class="card">
-            <div class="card-content">
+       
+            <div  class="card" >
                 <h2>{{center.name}}</h2>
-                <div class="details">1888
-                    <ul>
-                        <li>{{center.description}}.</li>
-                        <li>{{center.treatment_model}}.</li>
-                        <li>{{ center.address_1 }} <br> {{ center.address_2 }}</li>
-                    </ul>
+                <div class="card-content" >
+                    
+                    <div class="details">
+                        <ul>
+                            <li><a href="{{center.hyperlink}}"  target="_blank">{{center.hyperlink}}</a> </li>
+                            <li>{{center.treatment_model}}.</li>
+                            <li>{{ center.address_1 }} <br> {{ center.address_2 }}</li>
+                        </ul>
+                        
+                    </div>
+                    <div class="details">
+                        <ul>
+                            <li>{{center.hyperlink}}</li>
+                            <li>{{center.treatment_model}}.</li>
+                            <li>{{ center.address_1 }} <br> {{ center.address_2 }}</li>
+                        </ul>
+                        
+                    </div>
+
                 </div>
+                
             </div>
-        </a>
-        {% endfor %}
+            <div class="sub-card" id="sub_card_{{center.name}}">
+                <p> Here are more details about Card 2.</p>
+            </div>
+        
+    </main>    
+     {% endfor %}
         <!-- Add more cards dynamically here -->
-    </main>
+
+
+
+    <iframe allowtransparency="true" frameBorder="0" height="260" id="mentalhealthtreatmentfinder" marginHeight="0" marginWidth="0" name="mentalhealthtreatmentfinder" scrolling="no" src=https://findtreatment.gov/locator/widget/260?lang=en title="Samhsa.gov" width="260">https://findtreatment.gov/locator/widget/260?lang=en</iframe>
+
+    <script  type="text/javascript">
+        function myFunction(input) {
+        document.getElementById(input.id).classList.add('open')
+         let test = document.getElementById("sub_card_"+ input.id);
+         console.log(test)
+         if (test.className = "open"){
+            test.className = "Close"
+        
+         }
+        }
+</script>
 </body>
 </form>
 </html>

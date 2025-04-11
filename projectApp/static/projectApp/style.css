@@ -2,11 +2,17 @@
 .cards-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: 1.5rem;
     padding: 1rem;
-    max-width: 1200px;
+    text-align: left;
+    border-radius: 8px;
+    width: 800px;
+    max-width: 800px; /* Adjust width as needed */
+    border: 1px solid #ddd;
     margin: 0 auto;
+    margin-bottom: 5.5rem;
+    height: 200px;
+    position: relative;
 }
 
 /* Individual Cards */
@@ -15,22 +21,23 @@
     text-decoration: none; /* Removes default link styling */
     background-color: white;
     border: 1px solid #ddd;
-    border-radius: 8px;
-    width: 100%;
-    max-width: 800px; /* Adjust width as needed */
+    border-radius: 4px;
+    width: 800px;
+    position: relative;
     padding: 1rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     text-align: left; /* Align content to the left */
-    transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+    transition: transform 1.2s, box-shadow 0.2s, background-color 0.2s;
     color: inherit; /* Ensures text inherits color */
     gap: 1rem;
 }
 
 .card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); */
     background-color: #f9f9f9; /* Subtle color change on hover */
-}
+    width: 800px;
+  }
 /* Logo Style */
 .center-logo {
     width: 120px;
@@ -41,7 +48,10 @@
 
 /* Title and Details Section */
 .card-content {
-    flex: 1; /* Take up remaining space */
+    display: flex; /* Take up remaining space */
+}
+.card-content > div {
+  width: 50%;  /* Take up remaining space */
 }
 
 .card h2 {
@@ -50,7 +60,7 @@
     margin-bottom: 0.5rem;
 }
 
-.card .details {
+.card-content .details {
     font-size: 1rem;
     color: #555;
 }
@@ -65,6 +75,7 @@ header {
 
 /* FILTER BAR START*/
 .filter-bar{
+    display: flex;
     height: 100px;
     background-color: #bfdff0;
     padding: 16px;
@@ -115,4 +126,54 @@ header {
   .filter-hidden{
     visibility: hidden;
   }
+  /* .subDetails {
+    margin-top: 0px;
+    display: none; 
+    color: #555;
+    visibility: hidden;
+    opacity: 0 ;
+    transition: display 0s 0.1s, opacity 0.5s ease;
+    transition-behavior: allow-discrete;
+    
+  }
+  .card:hover .subDetails {
+    visibility: visible;
+     display: block; 
+    opacity: 1;
+    
+    
+  } */
+   
+
+  .sub-card {
+    
+    top: 100%; /* Position the sub-card directly below the main card */
+    left: 0;
+    width: 800px; /* Match the width of the main card */
+    margin-top: 0px; /* Add some space between the main card and sub-card */
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #e7f3ff;
+    color: #007bff;
+    display: hidden; /* Hide the sub-card initially */
+    z-index: 10; /* Ensure it appears on top of other elements */
+    opacity: 0 ;
+    transition: all 0.25s;
+    
+    transition-behavior: allow-discrete;
+    
+  }
+ 
+  .cards-container:hover >  .sub-card {
+    display: block; /* Show the sub-card when the main card is hovered */
+    opacity: 1;
+  }
+  .cards-container .open {
+
+    height: 350px;
+  }
+  /* .card-container {
+    position: relative; 
+  } */
 /* FILTER BAR END*/
