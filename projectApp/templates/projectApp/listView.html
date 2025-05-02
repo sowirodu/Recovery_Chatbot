@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 {% load static %}
 
-<div class="config-panel">
-</div>
+
 <form method= "POST">
 {% csrf_token %}
 
@@ -12,18 +11,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Treatment Centers</title>
     <link rel="stylesheet" href="{% static 'projectApp/style.css' %}">
+    <script src=
+    "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+        </script>
 </head>
 <body>
     <header>
         <h1>Treatment Centers</h1>
         
     </header>
-    <div class="filter-bar">
+    
+    {% comment %} <div class="filter-bar" >
         <span class="filter-dropdown-text">Filter dataset</span> 
         <a class="filter filter-hidden">
           Region <span class="operator">=</span> North America, Asia </a><a class="filter-remove filter-hidden">&times;</a>
         </a>
-        
+    div   
 <input type="checkbox" id="vehicle1" name="vehicle1" >
 <label for="vehicle1"> I have a bike</label><br>
 <input type="checkbox" id="check_LGBTQ"  >
@@ -32,8 +35,33 @@
 <label for="vehicle1"> Takes Insurance</label><br>
 <input type="checkbox" id="check_spiritual" >
 <label for="vehicle1"> Spiritual Practice</label><br>
-<button type="submit">Submit</button>
-    </div>
+<button type="Submit" name = "action" value = "Start" >Submit</button>
+<button type="Submit" name = "action" value = "Submit">Submit</button>
+
+    </div> {% endcomment %}
+    <div class="filter-bar">
+        <a class="filter-dropdown"><i class="fa fa-filter" aria-hidden="true"></i><i class="fa fa-plus filter-hidden" aria-hidden="true"></i><span class="filter-dropdown-text">Filter dataset</span> </a>
+        <a class="filter filter-hidden">
+          Region <span class="operator">=</span> North America, Asia </a><a class="filter-remove filter-hidden">&times;</a>
+        </a>
+      </div>
+      
+      <div class="edit-filter-modal hidden"><select>
+        <option>Region</option>
+        <option>String</option>
+        <option>Date</option>
+        <option>Number</option>
+        </select>
+        <select>
+        <option>Is</option>
+        <option>Is not</option>
+        <option>Is set</option>
+        <option>Is empty</option>
+        </select>
+        <input>
+        <button class="apply-button">Apply</button><button class="text-button">Cancel</button>
+      </div>
+      
       
     {% for center in centers%}
     <main  class="cards-container" onclick = "myFunction(this)" id = "{{center.name}}">
@@ -41,30 +69,51 @@
        
             <div  class="card" >
                 <h2>{{center.name}}</h2>
+                
                 <div class="card-content" >
                     
                     <div class="details">
                         <ul>
-                            <li><a href="{{center.hyperlink}}"  target="_blank">{{center.hyperlink}}</a> </li>
-                            <li>{{center.treatment_model}}.</li>
-                            <li>{{ center.address_1 }} <br> {{ center.address_2 }}</li>
+                            <li><a id = "link{{forloop.counter}}" href="{{center.hyperlink}}"  target="_blank">{{center.hyperlink}}</a> </li>
+                            <li>
+                                {%for treatment in center.treat_model.all%} 
+                                    {{treatment.name}}
+                                    
+                                    {% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </li>
+                            <li><div>{{ center.address_1 }}</div> <div hidden ="{{center.address_2}} ? UNKOWN: true"> {{ center.address_2}} </div> {{center.zipcode}} </li>
                         </ul>
                         
                     </div>
                     <div class="details">
                         <ul>
-                            <li>{{center.hyperlink}}</li>
-                            <li>{{center.treatment_model}}.</li>
-                            <li>{{ center.address_1 }} <br> {{ center.address_2 }}</li>
+                             {%comment%} Fixme replace with loop or better display method{%endcomment%}
+                            <li> Insurances: {%for Insurance in center.insurances.all%} 
+                                {{Insurance.name}}
+                                
+                                {% if not forloop.last %}, {% endif %}
+                            {% endfor %}</li>
+                            <li>Beds : {{forloop.counter}}</li>
                         </ul>
+                        
+                    </div>
+                    <div class="details" align ="right">
+                        
+                            <div id = "QR{{ forloop.counter }}"> 
+                            </div>
+                        
                         
                     </div>
 
                 </div>
+                <div id = "QR{{ forloop.counter }}"> 
+                            </div>
+                
                 
             </div>
             <div class="sub-card" id="sub_card_{{center.name}}">
-                <p> Here are more details about Card 2.</p>
+                <p> Description: {{center.description}}</p>
             </div>
         
     </main>    
@@ -78,13 +127,43 @@
     <script  type="text/javascript">
         function myFunction(input) {
         document.getElementById(input.id).classList.add('open')
-         let test = document.getElementById("sub_card_"+ input.id);
-         console.log(test)
-         if (test.className = "open"){
-            test.className = "Close"
+         //let test = document.getElementById("sub_card_"+ input.id);
+         //console.log(test)
+         //if (test.className = "open"){
+        //    test.className = "Close"
         
-         }
+         //}
         }
+
+        function openFilters(input) { //fixme add event listener for clicking off of the filters
+            filters = document.getElementById("edit-filter-modal")
+            filters.hidden = !filters.hidden
+        }
+        
+        num = 0
+        while (true){
+            num += 1
+            try {
+                qNum  = "QR" + num 
+                divElement = document.getElementById("QR" + num);
+                if (divElement){
+                    link = document.getElementById("link" + num);
+                    var qrcode = new QRCode(qNum,{ // FIXME would prefer to handle the qr creation on the back end and have it already assigned
+                        text: link.getAttribute("href"),
+                        width:100,
+                        height: 100 });
+                }
+                else{
+                    break;
+                }
+            }
+            catch (error){
+                break;
+            }
+
+            
+        }
+
 </script>
 </body>
 </form>

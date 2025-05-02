@@ -12,5 +12,5 @@ urlpatterns = [
     # ex: /polls/5/
     path("<int:question_id>/", views.detail, name="details"),  # Display a single question
 
-    path("list", views.listView, name = "list")
+    path("list", views.filteredlistView, name = "list")
 ]

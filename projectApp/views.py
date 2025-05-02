@@ -3,11 +3,57 @@ from django.http import HttpResponse
 from django.template import loader
 from django.http import Http404
 from django.views import generic
-
+import json
 from .models import Question, Choice, TreatmentCenter, UserResponse
 from django.shortcuts import redirect
 
 #test using base index view
+
+
+
+# this is the Center filter class with the custom functions if needed 
+# class CenterFilter():
+#     def __init__(self):
+#             self.name = None
+#             self.languages = None
+#             self.lgbtq = True #FIX Test
+#             self.insurrances = []
+#             self.ss_payments = None
+#             self.treat_model = []
+#             self.
+
+testFilters = {
+    "name" : None,
+    "languages" : None, # array
+    "lgbtq" : True,
+    "insurances" : None, # array
+    "ss_payments" : None,
+    "spiritual" : None,
+    "inpatient"  : None,
+    "outpatient" : None,
+    "med_assist"  : None, #bool
+    "residential"  : None ,#bool
+    "virtual"  : None, #bool
+    "methedone" : None, #bool
+    "suboxone" : None,#bool
+    "transportation" : None, #bool
+    "psych" : None
+}
+
+# def dict(self):
+#     output = {}
+#     for key, value in self.__dict__.items():
+#         if value != None or value == []:
+#             output[key] = value
+#     return output
+def dict(dict):
+    output = {}
+    for key, value in dict.items():
+        if value != None or value == []:
+            output[key] = value
+    return output   
+
+
 class IndexView(generic.ListView):
     template_name = "projectApp/listView.html"
     context_object_name = "centers"
@@ -74,11 +120,19 @@ def filteredlistView(request):
         raise Http404("No treatment centers found")
     
     if request.method == "POST":
+        # if request.POST.get('action') == "Start":
+        #      return render(request, "projectApp/listView.html", {"centers": centers})
         if request.POST.get('action') == "Submit":
-           lgbtq = request.POST.get('check_LGBTQ')
-           if(lgbtq):
-               centers = centers.filter(lgbtq=lgbtq)
-
+            holder = request.session.get('mydata')
+            if holder == None:    
+                test_filters = dict(testFilters)
+                request.session['mydata'] = test_filters
+                centers = centers.filter(**test_filters) # filtering can either be done with this way or with a specific loop "this is mor adjustable"
+            else:
+                centers = centers.filter(**holder)
+                request.session.pop('mydata')
+        redirect("projectApp:list")
+    
     return render(request, "projectApp/listView.html", {"centers": centers})
 
     
