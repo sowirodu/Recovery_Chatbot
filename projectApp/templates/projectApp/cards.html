@@ -1,0 +1,57 @@
+<html lang="en">
+{% for center in centers%}
+    <main  class="cards-container" onclick = "myFunction(this)" id = "{{center.name}}">
+        <!-- Example card -->
+       
+            <div  class="card" >
+                <h2>{{center.name}}</h2>
+                
+                <div class="card-content" >
+                    
+                    <div class="details">
+                        <ul>
+                            <li><a id = "link{{forloop.counter}}" href="{{center.hyperlink}}"  target="_blank">{{center.hyperlink}}</a> </li>
+                            <li>
+                                {%for treatment in center.treat_model.all%} 
+                                    {{treatment.name}}
+                                    
+                                    {% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </li>
+                            <li><div>{{ center.address_1 }}</div> <div hidden ="{{center.address_2}} ? UNKOWN: true"> {{ center.address_2}} </div> {{center.zipcode}} </li>
+                        </ul>
+                        
+                    </div>
+                    <div class="details">
+                        <ul>
+                             {%comment%} Fixme replace with loop or better display method{%endcomment%}
+                            <li> Insurances: {%for Insurance in center.insurances.all%} 
+                                {{Insurance.name}}
+                                
+                                {% if not forloop.last %}, {% endif %}
+                            {% endfor %}</li>
+                            <li>Beds : {{forloop.counter}}</li>
+                        </ul>
+                        
+                    </div>
+                    <div class="details" align ="right">
+                        
+                            <div id = "QR{{ forloop.counter }}"> 
+                            </div>
+                        
+                        
+                    </div>
+
+                </div>
+                <div id = "QR{{ forloop.counter }}"> 
+                            </div>
+                
+                
+            </div>
+            <div class="sub-card" id="sub_card_{{center.name}}">
+                <p> Description: {{center.description}}</p>
+            </div>
+        
+    </main>    
+     {% endfor %}
+</html>

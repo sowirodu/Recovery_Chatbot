@@ -3,7 +3,13 @@ from django.http import HttpResponse
 from django.template import loader
 from django.http import Http404
 from django.views import generic
+
+# imported the bellow block for js post call implementation
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 import json
+
+
 from .models import Question, Choice, TreatmentCenter, UserResponse
 from django.shortcuts import redirect
 
@@ -21,11 +27,11 @@ from django.shortcuts import redirect
 #             self.ss_payments = None
 #             self.treat_model = []
 #             self.
-
+# fix me use json
 testFilters = {
     "name" : None,
     "languages" : None, # array
-    "lgbtq" : True,
+    "lgbtq" : False,
     "insurances" : None, # array
     "ss_payments" : None,
     "spiritual" : None,
@@ -51,6 +57,7 @@ def dict(dict):
     for key, value in dict.items():
         if value != None or value == []:
             output[key] = value
+       
     return output   
 
 
@@ -112,9 +119,11 @@ def listView(request):
     return render(request, "projectApp/listView.html", {"centers": centers})
 
 
-
-def filteredlistView(request):
+# set defualt filter as second argument
+@csrf_exempt  # FIXMEif CSRF token is not being handled
+def filteredlistView(request, filters = testFilters): #FIXMEuse generic list view maybe?
     centers = TreatmentCenter.objects.all()
+    
     
     if not centers.exists():  # Check if no centers are available
         raise Http404("No treatment centers found")
@@ -122,20 +131,41 @@ def filteredlistView(request):
     if request.method == "POST":
         # if request.POST.get('action') == "Start":
         #      return render(request, "projectApp/listView.html", {"centers": centers})
-        if request.POST.get('action') == "Submit":
-            holder = request.session.get('mydata')
-            if holder == None:    
-                test_filters = dict(testFilters)
-                request.session['mydata'] = test_filters
-                centers = centers.filter(**test_filters) # filtering can either be done with this way or with a specific loop "this is mor adjustable"
-            else:
-                centers = centers.filter(**holder)
-                request.session.pop('mydata')
-        redirect("projectApp:list")
-    
-    return render(request, "projectApp/listView.html", {"centers": centers})
+        #if request.POST.get('action') == "Submit":
+        #used for ajax call
+        try: 
+            data = json.loads(request.body)
+            test_filters = dict(filters)
+            filterJson = json.dumps(test_filters)
+            centers = centers.filter(**dict(data))
+            #fixme use for AJAX if wanted
+            #return JsonResponse( {'message': 'Success', 'filter': filterJson} )
+            return render(request, "projectApp/cards.html", {"centers": centers, 'filter': dict(data)}) #version where filter does not
 
-    
+        except:
+            data = None
+            if filters != testFilters: 
+                #FIXME when using config table convert to a loop instead
+                filters['ss_payments'] = request.POST.get('check_ss_payments').checked
+                filters['virtual'] = request.POST.get('check_virtual').checked
+                filters['lgbtq'] = request.POST.get('check_LGBTQ').checked
+            
+            #holder = request.session.get('mydata')
+            #if holder == None:    
+            
+            #request.session['mydata'] = test_filters
+            
+                #else:
+                    # centers = centers.filter(**holder)
+                    # request.session.pop('mydata')
+            test_filters = dict(filters)
+            centers = centers.filter(**test_filters)  # filtering can either be done with this way or with a specific loop "this is more adjustable"
+            redirect("projectApp:list")
+    if (filters != testFilters):
+        return render(request, "projectApp/listView.html", {"centers": centers, 'filter': test_filters}) # Version when filter exsists
+    else:
+        return render(request, "projectApp/listView.html", {"centers": centers, 'filter': dict(filters)}) #version where filter does not
+    # fixme use jsonresponse for ajax requests if wanted
 
 currFilter = {
     "insurance" : [],

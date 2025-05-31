@@ -2,9 +2,10 @@
 {% load static %}
 
 
-<form method= "POST">
+
 {% csrf_token %}
 
+<div id="holder">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -40,29 +41,49 @@
 
     </div> {% endcomment %}
     <div class="filter-bar">
-        <a class="filter-dropdown"><i class="fa fa-filter" aria-hidden="true"></i><i class="fa fa-plus filter-hidden" aria-hidden="true"></i><span class="filter-dropdown-text">Filter dataset</span> </a>
+        <a class="filter-dropdown"><i class="fa fa-filter" aria-hidden="true"></i><i  class="fa fa-plus filter-hidden" aria-hidden="true"></i><span class="filter-dropdown-text" onclick = "openFilters()">Filter dataset</span> </a>
         <a class="filter filter-hidden">
           Region <span class="operator">=</span> North America, Asia </a><a class="filter-remove filter-hidden">&times;</a>
         </a>
+        <div id = "filter-modal" class="edit-filter-modal hidden" hidden = "true"><select>
+            <option>Region</option>
+            <option>String</option>
+            <option>Date</option>
+            <option>Number</option>
+            </select>
+            <select>
+            <option>Is</option>
+            <option>Is not</option>
+            <option>Is set</option>
+            <option>Is empty</option>
+            </select>
+            
+                
+            <input type="checkbox" id="check_virtual" checked= "{{filter.virtual}}" >
+            <label for="check_virtual"> </label> Virtual Practice<br>  
+
+            <input type="checkbox" id="check_LGBTQ"  checked ="{{filter.lgbtq}}">
+            <label for="check_LGBTQ"  id = "{{filter.lgbtq}}"> LGBTQ Accepting</label><br> 
+            {% comment %} FIXME filters should be generated auto if possible or with config tables names could also be gotten from fields of the table {% endcomment %}
+            <input type="checkbox" id="check_insurance"  >
+            <label for="check_insurance"> Insurance</label><br>
+          
+            <button id = "apply" class="apply-button"  value = 'null' name = "apply" >Apply</button>
+            <form method= "POST">
+
+            <button type = "button"  name = "tester" class="text-button" >Cancel</button>
+            </form>
+        </div>
+          <input id = "test_checkbox" type="checkbox" class = "checked">
+                <span class="checkmark"></span>
+                <label for id ="test_checkbox" class="container">One
+                </label>
       </div>
       
-      <div class="edit-filter-modal hidden"><select>
-        <option>Region</option>
-        <option>String</option>
-        <option>Date</option>
-        <option>Number</option>
-        </select>
-        <select>
-        <option>Is</option>
-        <option>Is not</option>
-        <option>Is set</option>
-        <option>Is empty</option>
-        </select>
-        <input>
-        <button class="apply-button">Apply</button><button class="text-button">Cancel</button>
-      </div>
       
-      
+    <!-- FIXME better ids currenly used for generating cards -->
+    <div id ="cards">
+
     {% for center in centers%}
     <main  class="cards-container" onclick = "myFunction(this)" id = "{{center.name}}">
         <!-- Example card -->
@@ -119,12 +140,13 @@
     </main>    
      {% endfor %}
         <!-- Add more cards dynamically here -->
-
+    </div>
 
 
     <iframe allowtransparency="true" frameBorder="0" height="260" id="mentalhealthtreatmentfinder" marginHeight="0" marginWidth="0" name="mentalhealthtreatmentfinder" scrolling="no" src=https://findtreatment.gov/locator/widget/260?lang=en title="Samhsa.gov" width="260">https://findtreatment.gov/locator/widget/260?lang=en</iframe>
 
-    <script  type="text/javascript">
+    <script  type="text/javascript"> //fixme do not use scripts here in the future for fear of unintentional data acess
+        console.log(filter)
         function myFunction(input) {
         document.getElementById(input.id).classList.add('open')
          //let test = document.getElementById("sub_card_"+ input.id);
@@ -134,10 +156,24 @@
         
          //}
         }
+        
 
-        function openFilters(input) { //fixme add event listener for clicking off of the filters
-            filters = document.getElementById("edit-filter-modal")
-            filters.hidden = !filters.hidden
+        // USE if want to apply front end filter work
+        //function applyFilter(){
+        //}
+
+        function openFilters() { //fixme add event listener for clicking off of the filters
+            filters = document.getElementById("filter-modal")
+            cls = "hidden"
+            if (filters.classList.contains(cls)){
+                filters.hidden = false
+                filters.classList.remove(cls)
+                
+            }
+            else{
+                filters.classList.add(cls)
+                setTimeout() // Fixme use set time out to apply hiddent
+            }
         }
         
         num = 0
@@ -165,6 +201,8 @@
         }
 
 </script>
+<script src="{% static 'projectApp/Test.js' %}"></script>
 </body>
-</form>
+
 </html>
+</div>

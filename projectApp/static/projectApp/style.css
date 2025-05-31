@@ -89,11 +89,15 @@ header {
 }
 
 .filter-bar{
+  position: sticky;
+  top: 0;
+  height: 20px;
+  z-index: 1000;
   background-color: #839bff;
   height: 50px;
   border-bottom: 1px solid #454545;
   padding: 16px;
-  margin-left: 0px;
+  margin-bottom: 10px;
 }
 
 
@@ -144,15 +148,17 @@ header {
 }
 
 .edit-filter-modal{
-  background-color: #151617;
-  width: 260px;
+  z-index: 1000;
+  position: relative;
+  background-color: #eff0f1;
+  width: 220px;
   position: absolute;
-  left: 416px;
+  left: 40px;
   border-radius: 0 0 4px 4px;
   box-shadow: 0 1px 3px 0 rgba(0,0,0,0.3);
   transition: transform 0.1s ease, opacity 0.1s ease;
   transform-origin: 0 0;
-  padding: 16px;
+  padding: 0px;
 }
 
 select{
@@ -164,8 +170,7 @@ select{
 }
 
 input{
-  width: 100%;
-  height: 32px;
+  height: 10px;
   border-radius: 3px;
   border: none;
   margin-bottom: 16px;
